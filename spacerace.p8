@@ -6,21 +6,24 @@ local spaceship
 local score
 local top_of_board
 local spaceship_starting_y
+local astroid
 
 function _init() 
     top_of_board=0
     spaceship_starting_y=110
-
     spaceship=make_spaceship()
+    astroid=make_astroid()
 end
 
 function _update()
     spaceship:update()
+    astroid:update()
 end
 
 function _draw() 
     cls()   
     spaceship:draw()
+    astroid:draw()
 end
 
 function make_spaceship()
@@ -49,6 +52,21 @@ function make_spaceship()
         end
     }
 end
+
+function make_astroid()
+    return {
+        x=64,
+        y=64,
+        width=2,
+        update=function(self)
+        end,
+        draw=function(self)
+            circfill(self.x,self.y,self.width,7)            
+        end
+    }
+
+end
+
 __gfx__
 00000000000770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000007767000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
