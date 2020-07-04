@@ -69,7 +69,7 @@ function make_astroid()
     return {
         x=64,
         y=64,
-        radius=2,
+        radius=1.5,
         update=function(self)
             self.x+=1
             if self.x == board_right then
