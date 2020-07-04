@@ -19,7 +19,8 @@ function _init()
     asteroids={}
 
     for i=1,25 do
-        add(asteroids, make_asteroid(rnd(120),rnd(90)))
+        local direction = i % 2 == 0 and 1 or -1
+        add(asteroids, make_asteroid(rnd(120),rnd(90),direction))
     end
 end
 
@@ -74,15 +75,19 @@ function make_spaceship()
     }
 end
 
-function make_asteroid(starting_x,starting_y)
+function make_asteroid(starting_x,starting_y,right_or_left)
     return {
         x=starting_x,
         y=starting_y,
         radius=1.5,
+        direction=right_or_left,
         update=function(self)
-            self.x+=1
+            self.x+=self.direction
             if self.x > board_right then
                 self.x=board_left
+            end
+            if self.x < board_left then
+                self.x=board_right
             end
         end,
         draw=function(self)
