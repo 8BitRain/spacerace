@@ -3,33 +3,51 @@ version 27
 __lua__
 
 local spaceship
+local score
+local top_of_board
+local spaceship_starting_y
 
 function _init() 
-	spaceship = {
-		x=64,
-		y=100,
-		speed=2,
-		update=function(self)
-			if btn(3) then
-				spaceship.y+=self.speed
-			end
-			if btn(2) then
-				spaceship.y-=self.speed
-			end
-		end,
-		draw=function(self)
-			spr(1,self.x,self.y)
-		end
-	}
+    top_of_board=0
+    spaceship_starting_y=110
+
+    spaceship=make_spaceship()
 end
 
 function _update()
-	spaceship:update()
+    spaceship:update()
 end
 
 function _draw() 
-	cls()	
-	spaceship:draw()
+    cls()   
+    spaceship:draw()
+end
+
+function make_spaceship()
+    return {
+        x=64,
+        y=spaceship_starting_y,
+        speed=2,
+        score=0,
+        width=8,
+        update=function(self)
+            if btn(3) then
+                self.y+=self.speed
+            end
+            if btn(2) then
+                self.y-=self.speed
+            end
+
+            if self.y == top_of_board then
+                self.score+=1
+                self.y=110
+            end
+        end,
+        draw=function(self)
+            spr(1,self.x,self.y)
+            print(self.score, self.x-2*self.width,spaceship_starting_y)
+        end
+    }
 end
 __gfx__
 00000000000770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
