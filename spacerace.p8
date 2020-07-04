@@ -64,7 +64,7 @@ function make_spaceship()
         width=8,
         radius=4,
         update=function(self)
-            if btn(3) then
+            if btn(3) and self.y<spaceship_starting_y then
                 self.y+=self.speed
             end
             if btn(2) then
