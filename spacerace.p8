@@ -8,7 +8,7 @@ local board_top
 local board_right
 local board_left
 local spaceship_starting_y
-local astroid
+local astroids
 
 function _init() 
     board_top=0
@@ -16,18 +16,43 @@ function _init()
     board_left=0
     spaceship_starting_y=110
     spaceship=make_spaceship()
-    astroid=make_astroid()
+    astroids={
+        make_astroid(0, 10),
+        make_astroid(70, 20),
+        make_astroid(30, 30),
+        make_astroid(80, 43),
+        make_astroid(15, 50),
+        make_astroid(90, 55),
+        make_astroid(100, 60),
+        make_astroid(60, 75),
+        make_astroid(73, 81),
+        make_astroid(120,90),
+
+        make_astroid(33, 28),
+        make_astroid(63, 17),
+        make_astroid(127, 95),
+        make_astroid(66, 89),
+        make_astroid(79, 24),
+        make_astroid(120,24)
+    }
+
 end
 
 function _update()
     spaceship:update()
-    astroid:update()
+    local astroid
+    for astroid in all(astroids) do
+        astroid:update()
+        spaceship:check_for_collision(astroid)
+    end
 end
 
 function _draw() 
     cls()   
     spaceship:draw()
-    astroid:draw()
+    for astroid in all(astroids) do
+        astroid:draw()
+    end
 end
 
 function make_spaceship()
@@ -50,25 +75,23 @@ function make_spaceship()
                 self.score+=1
                 self.y=spaceship_starting_y
             end
-
-            if self:check_for_collision(astroid) == true then
-                self.y=spaceship_starting_y
-            end
         end,
         draw=function(self)
             spr(1,self.x-3,self.y-4)
             print(self.score, self.x-2*self.width,spaceship_starting_y,7)
         end,
         check_for_collision=function(self,astroid)
-            return circles_overlapping(self.x,self.y,self.radius,astroid.x,astroid.y,astroid.radius)
+            if circles_overlapping(self.x,self.y,self.radius,astroid.x,astroid.y,astroid.radius) then 
+                self.y=spaceship_starting_y
+            end
         end
     }
 end
 
-function make_astroid()
+function make_astroid(starting_x,starting_y)
     return {
-        x=64,
-        y=64,
+        x=starting_x,
+        y=starting_y,
         radius=1.5,
         update=function(self)
             self.x+=1
