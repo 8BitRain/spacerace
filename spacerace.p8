@@ -1,17 +1,35 @@
 pico-8 cartridge // http://www.pico-8.com
 version 27
 __lua__
-function _init() 
 
+local spaceship
+
+function _init() 
+	spaceship = {
+		x=64,
+		y=100,
+		speed=2,
+		update=function(self)
+			if btn(3) then
+				spaceship.y+=self.speed
+			end
+			if btn(2) then
+				spaceship.y-=self.speed
+			end
+		end,
+		draw=function(self)
+			spr(1,self.x,self.y)
+		end
+	}
 end
 
 function _update()
+	spaceship:update()
 end
 
 function _draw() 
- cls()
- circfill(50,50,5,4)
- spr(1,64,100)
+	cls()	
+	spaceship:draw()
 end
 __gfx__
 00000000000770000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
