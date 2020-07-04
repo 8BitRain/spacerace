@@ -4,12 +4,16 @@ __lua__
 
 local spaceship
 local score
-local top_of_board
+local board_top
+local board_right
+local board_left
 local spaceship_starting_y
 local astroid
 
 function _init() 
-    top_of_board=0
+    board_top=0
+    board_right=128
+    board_left=0
     spaceship_starting_y=110
     spaceship=make_spaceship()
     astroid=make_astroid()
@@ -41,14 +45,14 @@ function make_spaceship()
                 self.y-=self.speed
             end
 
-            if self.y == top_of_board then
+            if self.y == board_top then
                 self.score+=1
                 self.y=110
             end
         end,
         draw=function(self)
             spr(1,self.x,self.y)
-            print(self.score, self.x-2*self.width,spaceship_starting_y)
+            print(self.score, self.x-2*self.width,spaceship_starting_y,7)
         end
     }
 end
@@ -59,9 +63,13 @@ function make_astroid()
         y=64,
         width=2,
         update=function(self)
+            self.x+=1
+            if self.x == board_right then
+                self.x=board_left
+            end
         end,
         draw=function(self)
-            circfill(self.x,self.y,self.width,7)            
+            circfill(self.x,self.y,self.width,7)
         end
     }
 
