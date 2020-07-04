@@ -8,7 +8,7 @@ local board_top
 local board_right
 local board_left
 local spaceship_starting_y
-local astroids
+local asteroids
 
 function _init() 
     board_top=0
@@ -16,42 +16,42 @@ function _init()
     board_left=0
     spaceship_starting_y=110
     spaceship=make_spaceship()
-    astroids={
-        make_astroid(0, 10),
-        make_astroid(70, 20),
-        make_astroid(30, 30),
-        make_astroid(80, 43),
-        make_astroid(15, 50),
-        make_astroid(90, 55),
-        make_astroid(100, 60),
-        make_astroid(60, 75),
-        make_astroid(73, 81),
-        make_astroid(120,90),
+    asteroids={
+        make_asteroid(0, 10),
+        make_asteroid(70, 20),
+        make_asteroid(30, 30),
+        make_asteroid(80, 43),
+        make_asteroid(15, 50),
+        make_asteroid(90, 55),
+        make_asteroid(100, 60),
+        make_asteroid(60, 75),
+        make_asteroid(73, 81),
+        make_asteroid(120,90),
 
-        make_astroid(33, 28),
-        make_astroid(63, 17),
-        make_astroid(127, 95),
-        make_astroid(66, 89),
-        make_astroid(79, 24),
-        make_astroid(120,24)
+        make_asteroid(33, 28),
+        make_asteroid(63, 17),
+        make_asteroid(127, 95),
+        make_asteroid(66, 89),
+        make_asteroid(79, 24),
+        make_asteroid(120,24)
     }
 
 end
 
 function _update()
     spaceship:update()
-    local astroid
-    for astroid in all(astroids) do
-        astroid:update()
-        spaceship:check_for_collision(astroid)
+    local asteroid
+    for asteroid in all(asteroids) do
+        asteroid:update()
+        spaceship:check_for_collision(asteroid)
     end
 end
 
 function _draw() 
     cls()   
     spaceship:draw()
-    for astroid in all(astroids) do
-        astroid:draw()
+    for asteroid in all(asteroids) do
+        asteroid:draw()
     end
 end
 
@@ -80,15 +80,15 @@ function make_spaceship()
             spr(1,self.x-3,self.y-4)
             print(self.score, self.x-2*self.width,spaceship_starting_y,7)
         end,
-        check_for_collision=function(self,astroid)
-            if circles_overlapping(self.x,self.y,self.radius,astroid.x,astroid.y,astroid.radius) then 
+        check_for_collision=function(self,asteroid)
+            if circles_overlapping(self.x,self.y,self.radius,asteroid.x,asteroid.y,asteroid.radius) then 
                 self.y=spaceship_starting_y
             end
         end
     }
 end
 
-function make_astroid(starting_x,starting_y)
+function make_asteroid(starting_x,starting_y)
     return {
         x=starting_x,
         y=starting_y,
