@@ -67,14 +67,8 @@ end
 
 function draw_menu()
     centered_print("space race", 64, 64, 7)
-    centered_print("press \x97 or \x8e to play",64,96,7)
+    centered_print("press \x97 to play",64,96,7)
 end
-
-function centered_print(text,x,y,col)
-    print(text,x-#text*2,y, col, 13)
-end
-
-
 
 function make_spaceship()
     return {
@@ -136,6 +130,19 @@ function circles_overlapping(x1,y1,r1,x2,y2,r2)
     local dy=y2-y1
     local distance=sqrt(dx*dx+dy*dy)
     return distance < (r1+r2)
+end
+
+function centered_print(text,x,y,col)
+    outlined_print(text, x-#text*2, y, col, 5)
+end
+
+function outlined_print(text,x,y,col,outline_col)
+    print(text,x-1,y,outline_col)
+    print(text,x+1,y,outline_col)
+    print(text,x,y-1,outline_col)
+    print(text,x,y+1,outline_col)
+
+    print(text,x,y,col)
 end
 
 __gfx__
