@@ -10,6 +10,8 @@ local board_left
 local spaceship_starting_y
 local asteroids
 local game_state
+local level_transition
+local level_transition_time
 
 function _init() 
     board_top=0
@@ -19,6 +21,8 @@ function _init()
     spaceship=make_spaceship()
     asteroids={}
     game_state=0
+    level_transition=false
+    level_transition_time=0
 
     for i=1,25 do
         local direction = i % 2 == 0 and 1 or -1
@@ -35,6 +39,14 @@ function _update()
 end
 
 function update_game()
+    if level_transition then 
+        level_transition_time+=1
+        if level_transition_time > 50 then
+            level_transition=false
+            level_transition_time=0
+        end
+    end
+
     spaceship:update()
     local asteroid
     for asteroid in all(asteroids) do
@@ -87,12 +99,19 @@ function make_spaceship()
             end
 
             if self.y == board_top then
-                self.score+=1
-                self.y=spaceship_starting_y
+                self:advance()
             end
         end,
+        advance=function(self)
+            self.score+=1
+            sfx(1)
+            level_transition=true
+            self.y=spaceship_starting_y
+        end,
         draw=function(self)
-            spr(1,self.x-3,self.y-4)
+            if not level_transition then
+                spr(1,self.x-3,self.y-4)
+            end
             print(self.score, self.x-2*self.width,spaceship_starting_y,7)
         end,
         check_for_collision=function(self,asteroid)
@@ -156,3 +175,4 @@ __gfx__
 000000000980098000eee00000011100407a70040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
 0001000000000000000000000000000002f0502e0502d0502c0502a05024050230501e0001e000200001d00000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000600000d6500e6500e650106500e6500f6500f650106500f6500f650106500e6500e6500d6500d6500e65010650116501265014650166501765018650186501a6501c6501e6501f6502365025650276502a650
