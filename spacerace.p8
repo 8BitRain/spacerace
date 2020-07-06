@@ -108,11 +108,13 @@ function make_spaceship()
         width=8,
         radius=4,
         update=function(self)
-            if btn(3) and self.y<spaceship_starting_y then
-                self.y+=self.speed
-            end
-            if btn(2) then
-                self.y-=self.speed
+            if not level_transition then
+                if btn(3) and self.y<spaceship_starting_y then
+                    self.y+=self.speed
+                end
+                if btn(2) then
+                    self.y-=self.speed
+                end
             end
 
             if self.y == board_top then
