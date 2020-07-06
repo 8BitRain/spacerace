@@ -9,6 +9,7 @@ local board_right
 local board_left
 local spaceship_starting_y
 local asteroids
+local game_state
 
 function _init() 
     board_top=0
@@ -17,6 +18,7 @@ function _init()
     spaceship_starting_y=110
     spaceship=make_spaceship()
     asteroids={}
+    game_state=0
 
     for i=1,25 do
         local direction = i % 2 == 0 and 1 or -1
@@ -25,6 +27,14 @@ function _init()
 end
 
 function _update()
+    if game_state == 1 then
+        update_game()
+    else
+        update_menu()
+    end
+end
+
+function update_game()
     spaceship:update()
     local asteroid
     for asteroid in all(asteroids) do
@@ -33,13 +43,38 @@ function _update()
     end
 end
 
+function update_menu()
+    if btn(4) or btn(5) then
+        game_state = 1
+    end
+end
+
 function _draw() 
-    cls()   
+    cls()
+    if game_state == 1 then
+        draw_game()
+    else
+        draw_menu()
+    end
+end
+
+function draw_game()
     spaceship:draw()
     for asteroid in all(asteroids) do
         asteroid:draw()
     end
 end
+
+function draw_menu()
+    centered_print("space race", 64, 64, 7)
+    centered_print("press \x97 or \x8e to play",64,96,7)
+end
+
+function centered_print(text,x,y,col)
+    print(text,x-#text*2,y, col, 13)
+end
+
+
 
 function make_spaceship()
     return {
