@@ -63,6 +63,7 @@ end
 
 function _draw() 
     cls()
+    draw_sky()
     if game_state == 1 then
         draw_game()
     else
@@ -80,6 +81,22 @@ end
 function draw_menu()
     centered_print("space race", 64, 64, 7)
     centered_print("press \x97 to play",64,96,7)
+end
+
+function draw_sky()
+    -- thanks to trasevol_dog https://www.patreon.com/posts/pico-8-bach-day-17944892
+    local cols={12,12,12,12,13,5,1,1,1,0,0}
+    local ptrns={0b0111101111011110, 0b0110001110011100, 0b0100001000011000, 0b0000001000010000}
+    local y=120
+    for i=0,#cols-2 do
+        color(cols[i+1]*16+cols[i+2])
+        for j=0,3 do
+            fillp(ptrns[j+1])
+            rectfill(0,y,127,y-1)
+            y-=2
+        end
+    end
+    fillp()
 end
 
 function make_spaceship()
