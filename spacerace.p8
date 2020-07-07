@@ -190,14 +190,16 @@ function make_spaceship()
             end
         end,
         fire_thrusters=function(self)
-            spawn_particle(self.x+3,self.y+4,1)
-            spawn_particle(self.x+3,self.y+4,0)
-            spawn_particle(self.x+3,self.y+4,-1)
-            spawn_particle(self.x-2,self.y+4,1)
-            spawn_particle(self.x-2,self.y+4,0)
-            spawn_particle(self.x-2,self.y+4,-1)
+            fire_thruster(self.x+3, self.y+4)
+            fire_thruster(self.x-2, self.y+4)
         end
     }
+end
+
+function fire_thruster(x,y) 
+    spawn_particle(x,y,1)
+    spawn_particle(x,y,0)
+    spawn_particle(x,y,-1)
 end
 
 function make_asteroid(starting_x,starting_y,right_or_left)
