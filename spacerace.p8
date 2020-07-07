@@ -50,7 +50,6 @@ function update_game()
     end
 
     spaceship:update()
-    local asteroid
     for asteroid in all(asteroids) do
         asteroid:update()
         spaceship:check_for_collision(asteroid)
