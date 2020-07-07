@@ -12,6 +12,7 @@ local asteroids
 local game_state
 local level_transition
 local level_transition_time
+local particles
 
 function _init() 
     board_top=0
@@ -20,6 +21,7 @@ function _init()
     spaceship_starting_y=110
     spaceship=make_spaceship()
     asteroids={}
+    particles={}
     game_state=0
     level_transition=false
     level_transition_time=0
@@ -53,6 +55,13 @@ function update_game()
         asteroid:update()
         spaceship:check_for_collision(asteroid)
     end
+
+    for particle in all(particles) do
+        particle:update()
+        if particle.y > 128 or particle:is_expired() then
+            del(particles, particle)
+        end
+    end
 end
 
 function update_menu()
@@ -75,6 +84,9 @@ function draw_game()
     spaceship:draw()
     for asteroid in all(asteroids) do
         asteroid:draw()
+    end
+    for particle in all(particles) do
+        particle:draw()
     end
 end
 
@@ -99,6 +111,37 @@ function draw_sky()
     fillp()
 end
 
+function spawn_particle(_x,_y,_direction)
+    add(particles,{
+        x=_x,
+        y=_y,
+        c=_y,
+        direction=_direction,
+        lifetime=0,
+        speed=.5,
+        draw=function(self)
+            local col
+            if (self.lifetime <2) then
+                col= 7
+            elseif self.lifetime<5 then
+                col=10
+            else
+                col=9
+            end
+            pset(self.x,self.y,col)
+        end,
+        update=function(self)
+            self.x+=self.direction*self.speed
+            self.y=self.c+2
+            self.y=(self.lifetime*self.lifetime)*rnd(3)*.1+self.c
+            self.lifetime+=1
+        end,
+        is_expired=function(self)
+            return self.lifetime >= 7
+        end
+    })
+end
+
 function make_spaceship()
     return {
         x=64,
@@ -111,7 +154,10 @@ function make_spaceship()
             if not level_transition then
                 if btn(3) and self.y<spaceship_starting_y then
                     self.y+=self.speed
+                else
+                    self:fire_thrusters()
                 end
+
                 if btn(2) then
                     self.y-=self.speed
                 end
@@ -138,6 +184,12 @@ function make_spaceship()
                 self.y=spaceship_starting_y
                 sfx(0)
             end
+        end,
+        fire_thrusters=function(self)
+            spawn_particle(self.x+3,self.y+4,1)
+            spawn_particle(self.x+3,self.y+4,-1)
+            spawn_particle(self.x-2,self.y+4,1)
+            spawn_particle(self.x-2,self.y+4,-1)
         end
     }
 end
