@@ -131,9 +131,13 @@ function spawn_particle(_x,_y,_direction)
             pset(self.x,self.y,col)
         end,
         update=function(self)
-            self.x+=self.direction*self.speed
-            self.y=self.c+2
-            self.y=(self.lifetime*self.lifetime)*rnd(3)*.1+self.c
+            if self.direction == 0 then
+                self.y+=1.5*rnd(1)
+            else
+                self.x+=self.direction*self.speed
+                self.y=(self.lifetime*self.lifetime)*rnd(3)*.1+self.c
+            end
+            
             self.lifetime+=1
         end,
         is_expired=function(self)
@@ -187,8 +191,10 @@ function make_spaceship()
         end,
         fire_thrusters=function(self)
             spawn_particle(self.x+3,self.y+4,1)
+            spawn_particle(self.x+3,self.y+4,0)
             spawn_particle(self.x+3,self.y+4,-1)
             spawn_particle(self.x-2,self.y+4,1)
+            spawn_particle(self.x-2,self.y+4,0)
             spawn_particle(self.x-2,self.y+4,-1)
         end
     }
