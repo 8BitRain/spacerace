@@ -3,9 +3,6 @@ version 27
 __lua__
 
 local score
-local board_top
-local board_right
-local board_left
 local spaceship_starting_y
 local game_state -- 0: menu, 1: playing game, 2:you win!
 local level_transition
@@ -14,9 +11,6 @@ local game_objects
 
 function _init() 
     -- constants
-    board_top=0
-    board_right=128
-    board_left=0
     spaceship_starting_y=110
     
     -- game state
@@ -112,7 +106,7 @@ function draw_sky()
     fillp()
 end
 
-makeion spawn_particle(x,y,_direction)
+function make_particle(x,y,_direction)
     make_game_object("particle", x,y, {
         c=y,
         direction=_direction,
@@ -175,7 +169,7 @@ function make_spaceship()
                 self.y=min(self.y,spaceship_starting_y)
             end
 
-            if self.y <= board_top then
+            if self.y <= 0 then
                 self:score_point()
             end
 
@@ -226,11 +220,11 @@ function make_asteroid(x,y,right_or_left)
         direction=right_or_left,
         update=function(self)
             self.x+=self.direction
-            if self.x > board_right then
-                self.x=board_left
+            if self.x > 128 then
+                self.x=0
             end
-            if self.x < board_left then
-                self.x=board_right
+            if self.x < 0 then
+                self.x=128
             end
         end,
         draw=function(self)
