@@ -157,7 +157,7 @@ function make_spaceship()
         x=64,
         y=spaceship_starting_y,
         velocity=0,
-        speed=1.7, 
+        speed=1.3, 
         score=0,
         width=8,
         radius=4,
