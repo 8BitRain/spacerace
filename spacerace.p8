@@ -35,7 +35,7 @@ end
 function _update()
     if game_state == 1 then
         update_game()
-    else
+    elseif game_state == 0 then
         update_menu()
     end
 end
@@ -75,7 +75,7 @@ function _draw()
     if game_state == 1 then
         draw_game()
     elseif game_state == 2 then
-        centered_print("you win!!!!",64, 64, 7)
+        draw_win_screen()
     else
         draw_menu()
     end
@@ -94,6 +94,10 @@ end
 function draw_menu()
     centered_print("space race", 64, 64, 7)
     centered_print("press \x97 to play",64,96,7)
+end
+
+function draw_win_screen()
+    centered_print("you win!!!!",64, 64, 7)
 end
 
 function draw_sky()
@@ -184,7 +188,6 @@ function make_spaceship()
         end,
         score_point=function(self)
             self.score+=1
-            sfx(1)
             level_transition=true
             self.y=spaceship_starting_y
             if self.score >= 10 then
