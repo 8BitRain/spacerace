@@ -165,7 +165,7 @@ function make_spaceship()
                 -- decelerate
                 self.velocity*=.8
 
-                if btn(3) then
+                if btn(3) and self.y != spaceship_starting_y then
                     self.velocity=self.speed
                 else
                     self:fire_thrusters()
