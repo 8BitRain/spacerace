@@ -105,7 +105,7 @@ function draw_sky()
         color(cols[i+1]*16+cols[i+2])
         for j=0,3 do
             fillp(ptrns[j+1])
-            rectfill(0,y,127,y-1)
+            rectfill(0,y,128,y-1)
             y-=2
         end
     end
