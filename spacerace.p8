@@ -26,7 +26,7 @@ function _init()
     level_transition=false
     level_transition_time=0
 
-    for i=1,20 do
+    for i=1,24 do
         local direction = i % 2 == 0 and 1 or -1
         add(asteroids, make_asteroid(rnd(120),rnd(90),direction))
     end
@@ -133,10 +133,10 @@ function spawn_particle(_x,_y,_direction)
         end,
         update=function(self)
             if self.direction == 0 then
-                self.y+=1.5*rnd(1)
+                self.y+=2.5*rnd(1)
             else
                 self.x+=self.direction*self.speed
-                self.y=(self.lifetime*self.lifetime)*rnd(5)*.1+self.c
+                self.y=(self.lifetime*self.lifetime)*rnd(4)*.1+self.c
             end
             
             self.lifetime+=1
