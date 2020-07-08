@@ -151,24 +151,30 @@ function make_spaceship()
     return {
         x=64,
         y=spaceship_starting_y,
+        velocity=0,
         speed=2,
         score=0,
         width=8,
         radius=4,
         update=function(self)
             if not level_transition then
-                if btn(3) and self.y<spaceship_starting_y then
-                    self.y+=self.speed
+                -- apply gravity
+                self.velocity*=.3
+
+                if btn(3) and self.y<spaceship_starting_y+self.velocity then
+                    self.velocity+=self.speed
                 else
                     self:fire_thrusters()
                 end
 
                 if btn(2) then
-                    self.y-=self.speed
+                    self.velocity-=self.speed
                 end
+
+                self.y+=self.velocity
             end
 
-            if self.y == board_top then
+            if self.y <= board_top then
                 self:score_point()
             end
         end,
