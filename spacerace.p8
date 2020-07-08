@@ -26,7 +26,7 @@ function _init()
     level_transition=false
     level_transition_time=0
 
-    for i=1,25 do
+    for i=1,20 do
         local direction = i % 2 == 0 and 1 or -1
         add(asteroids, make_asteroid(rnd(120),rnd(90),direction))
     end
@@ -136,7 +136,7 @@ function spawn_particle(_x,_y,_direction)
                 self.y+=1.5*rnd(1)
             else
                 self.x+=self.direction*self.speed
-                self.y=(self.lifetime*self.lifetime)*rnd(3)*.1+self.c
+                self.y=(self.lifetime*self.lifetime)*rnd(5)*.1+self.c
             end
             
             self.lifetime+=1
@@ -152,26 +152,30 @@ function make_spaceship()
         x=64,
         y=spaceship_starting_y,
         velocity=0,
-        speed=2,
+        speed=1.7, 
         score=0,
         width=8,
         radius=4,
         update=function(self)
             if not level_transition then
-                -- apply gravity
-                self.velocity*=.3
+                -- decelerate
+                self.velocity*=.8
 
-                if btn(3) and self.y<spaceship_starting_y+self.velocity then
-                    self.velocity+=self.speed
+                if btn(3) then
+                    self.velocity=self.speed
                 else
                     self:fire_thrusters()
                 end
 
+                -- gravity
+                self.velocity+=0.05
+
                 if btn(2) then
-                    self.velocity-=self.speed
+                    self.velocity=-self.speed
                 end
 
                 self.y+=self.velocity
+                self.y=min(self.y,spaceship_starting_y)
             end
 
             if self.y <= board_top then
