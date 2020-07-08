@@ -2,34 +2,35 @@ pico-8 cartridge // http://www.pico-8.com
 version 27
 __lua__
 
-local spaceship
 local score
 local board_top
 local board_right
 local board_left
 local spaceship_starting_y
-local asteroids
 local game_state -- 0: menu, 1: playing game, 2:you win!
 local level_transition
 local level_transition_time
-local particles
+local game_objects
 
 function _init() 
+    -- constants
     board_top=0
     board_right=128
     board_left=0
     spaceship_starting_y=110
-    spaceship=make_spaceship()
-    asteroids={}
-    particles={}
+    
+    -- game state
     game_state=0
     level_transition=false
     level_transition_time=0
 
+    -- game objects
+    game_objects={}
     for i=1,24 do
         local direction = i % 2 == 0 and 1 or -1
-        add(asteroids, make_asteroid(rnd(120),rnd(90),direction))
+        make_asteroid(rnd(120),rnd(90),direction)
     end
+    make_spaceship()
 end
 
 function _update()
@@ -49,18 +50,16 @@ function update_game()
         end
     end
 
-    spaceship:update()
-    for asteroid in all(asteroids) do
-        asteroid:update()
-        spaceship:check_for_collision(asteroid)
+    local obj
+    for obj in all(game_objects) do
+        obj:update()
     end
 
-    for particle in all(particles) do
-        particle:update()
+    foreach_game_object_of_kind("particle", function(particle)
         if particle.y > 128 or particle:is_expired() then
-            del(particles, particle)
+            del(game_objects, particle)
         end
-    end
+    end)
 end
 
 function update_menu()
@@ -82,18 +81,14 @@ function _draw()
 end
 
 function draw_game()
-    spaceship:draw()
-    for asteroid in all(asteroids) do
-        asteroid:draw()
-    end
-    for particle in all(particles) do
-        particle:draw()
+    local obj
+    for obj in all(game_objects) do
+        obj:draw()
     end
 end
 
 function draw_menu()
     centered_print("space race", 64, 70, 7)
-
     centered_print("press \x97 to play",64,96,7)
 end
 
@@ -117,11 +112,9 @@ function draw_sky()
     fillp()
 end
 
-function spawn_particle(_x,_y,_direction)
-    add(particles,{
-        x=_x,
-        y=_y,
-        c=_y,
+makeion spawn_particle(x,y,_direction)
+    make_game_object("particle", x,y, {
+        c=y,
         direction=_direction,
         lifetime=0,
         speed=.5,
@@ -153,9 +146,7 @@ function spawn_particle(_x,_y,_direction)
 end
 
 function make_spaceship()
-    return {
-        x=64,
-        y=spaceship_starting_y,
+    make_game_object("spaceship",64,spaceship_starting_y, {
         velocity=0,
         speed=1.3, 
         score=0,
@@ -167,6 +158,7 @@ function make_spaceship()
                 self.velocity*=.8
 
                 if btn(3) and self.y != spaceship_starting_y then
+                    -- cut engine and freefall
                     self.velocity=self.speed
                 else
                     self:fire_thrusters()
@@ -186,6 +178,10 @@ function make_spaceship()
             if self.y <= board_top then
                 self:score_point()
             end
+
+            foreach_game_object_of_kind("asteroid", function(asteroid)
+                self:check_for_collision(asteroid)
+            end)
         end,
         score_point=function(self)
             self.score+=1
@@ -215,19 +211,17 @@ function make_spaceship()
             fire_thruster(self.x+3, self.y+4)
             fire_thruster(self.x-2, self.y+4)
         end
-    }
+    })
 end
 
 function fire_thruster(x,y) 
-    spawn_particle(x,y,1)
-    spawn_particle(x,y,0)
-    spawn_particle(x,y,-1)
+    make_particle(x,y,1)
+    make_particle(x,y,0)
+    make_particle(x,y,-1)
 end
 
-function make_asteroid(starting_x,starting_y,right_or_left)
-    return {
-        x=starting_x,
-        y=starting_y,
+function make_asteroid(x,y,right_or_left)
+    make_game_object("asteroid", x, y, {
         radius=1.5,
         direction=right_or_left,
         update=function(self)
@@ -242,7 +236,7 @@ function make_asteroid(starting_x,starting_y,right_or_left)
         draw=function(self)
             circfill(self.x,self.y,self.radius,7)
         end
-    }
+    })
 end
 
 function circles_overlapping(x1,y1,r1,x2,y2,r2)
@@ -252,6 +246,37 @@ function circles_overlapping(x1,y1,r1,x2,y2,r2)
     return distance < (r1+r2)*(r1+r2)
 end
 
+-- shared game_object things
+function make_game_object(kind,x,y,props)
+    local obj = {
+        kind=kind,
+        x=x,
+        y=y,
+        draw=function(self)
+        end,
+        update=function(self)
+        end
+    }
+
+    -- add aditional object properties
+    for k,v in pairs(props) do
+        obj[k] = v
+    end
+
+    -- add new object to list of game objects
+    add(game_objects, obj)
+end
+
+function foreach_game_object_of_kind(kind, callback)
+    local obj
+    for obj in all(game_objects) do
+        if obj.kind == kind then
+            callback(obj)
+        end
+    end
+end
+
+-- fancy printing
 function centered_print(text,x,y,col)
     outlined_print(text, x-#text*2, y, col, 5)
 end
@@ -264,6 +289,7 @@ function outlined_print(text,x,y,col,outline_col)
 
     print(text,x,y,col)
 end
+
 
 __gfx__
 00000000000770000aaaaa0000000000444444400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
