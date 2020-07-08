@@ -248,8 +248,8 @@ end
 function circles_overlapping(x1,y1,r1,x2,y2,r2)
     local dx=x2-x1
     local dy=y2-y1
-    local distance=sqrt(dx*dx+dy*dy)
-    return distance < (r1+r2)
+    local distance=dx*dx+dy*dy
+    return distance < (r1+r2)*(r1+r2)
 end
 
 function centered_print(text,x,y,col)
