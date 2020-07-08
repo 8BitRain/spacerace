@@ -140,16 +140,16 @@ function make_particle(x,y,_direction)
 end
 
 function make_spaceship()
-    make_game_object("spaceship",64,spaceship_starting_y, {
+    make_game_object("spaceship", 64, spaceship_starting_y, {
         velocity=0,
-        speed=1.3, 
+        speed=1.7, 
         score=0,
         width=8,
         radius=4,
         update=function(self)
             if not level_transition then
-                -- decelerate
-                self.velocity*=.8
+                -- air resistance
+                self.velocity*=.6
 
                 if btn(3) and self.y != spaceship_starting_y then
                     -- cut engine and freefall
@@ -159,7 +159,7 @@ function make_spaceship()
                 end
 
                 -- gravity
-                self.velocity+=0.05
+                self.velocity+=0.1
 
                 if btn(2) then
                     self.velocity=-self.speed
