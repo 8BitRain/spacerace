@@ -9,7 +9,7 @@ local board_right
 local board_left
 local spaceship_starting_y
 local asteroids
-local game_state
+local game_state -- 0: menu, 1: playing game, 2:you win!
 local level_transition
 local level_transition_time
 local particles
@@ -74,6 +74,8 @@ function _draw()
     draw_sky()
     if game_state == 1 then
         draw_game()
+    elseif game_state == 2 then
+        centered_print("you win!!!!",64, 64, 7)
     else
         draw_menu()
     end
@@ -167,14 +169,17 @@ function make_spaceship()
             end
 
             if self.y == board_top then
-                self:advance()
+                self:score_point()
             end
         end,
-        advance=function(self)
+        score_point=function(self)
             self.score+=1
             sfx(1)
             level_transition=true
             self.y=spaceship_starting_y
+            if self.score >= 10 then
+                game_state=2
+            end
         end,
         draw=function(self)
             if not level_transition then
