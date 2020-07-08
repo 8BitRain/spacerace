@@ -43,7 +43,7 @@ end
 function update_game()
     if level_transition then 
         level_transition_time+=1
-        if level_transition_time > 50 then
+        if level_transition_time > 17 then
             level_transition=false
             level_transition_time=0
         end
@@ -188,8 +188,10 @@ function make_spaceship()
         end,
         score_point=function(self)
             self.score+=1
+            sfx(2)
             level_transition=true
             self.y=spaceship_starting_y
+            self.velocity=0
             if self.score >= 10 then
                 game_state=2
             end
@@ -272,3 +274,4 @@ __gfx__
 __sfx__
 0001000000000000000000000000000002f0502e0502d0502c0502a05024050230501e0001e000200001d00000000000000000000000000000000000000000000000000000000000000000000000000000000000
 000600000d6500e6500e650106500e6500f6500f650106500f6500f650106500e6500e6500d6500d6500e65010650116501265014650166501765018650186501a6501c6501e6501f6502365025650276502a650
+010b00000c7500e750137501874018730007000070000700007000070000700007000070000700007000070000700007000070000700007000070000700007000070000700007000070000700007000070000700
