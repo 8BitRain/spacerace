@@ -23,7 +23,7 @@ function start_new_game()
     score=0
 
     game_objects={}
-    generate_asteroids(24)
+    generate_asteroids(15)
     make_spaceship()
 end
 
@@ -314,12 +314,15 @@ end
 
 -- assorted helpers
 function deal_with_level_transition()
-    if level_transition then 
-        level_transition_time+=1
-        if level_transition_time > 17 then
-            level_transition=false
-            level_transition_time=0
-        end
+    if (not level_transition) return nil
+    level_transition_time+=1
+    if level_transition_time > 17 then
+        level_transition=false
+        level_transition_time=0
+        foreach_game_object_of_kind("asteroid", function(asteroid)
+            del(game_objects,asteroid)
+        end)
+        generate_asteroids(15 + score) -- increase number of asteroids each time player scores
     end
 end
 
