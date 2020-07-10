@@ -87,7 +87,7 @@ function draw_game()
     end
 
     print(life_icons(), 4, spaceship_starting_y+8, 7)
-    print("score: " ..score, 93, spaceship_starting_y+8, 7)
+    print(score.. "/10", 109, spaceship_starting_y+8, 7)
 end
 
 function draw_menu()
