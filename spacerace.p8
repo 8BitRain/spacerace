@@ -11,7 +11,6 @@ local game_objects
 local lives_remaining
 local score
 
-
 -- initialization functions
 function _init() 
     game_state="menu"
@@ -83,7 +82,7 @@ function draw_game()
         obj:draw()
     end
 
-    print("lives: "..lives_remaining, 4, spaceship_starting_y+8, 7)
+    print("spare ships: "..life_icons(), 4, spaceship_starting_y+8, 7)
     print("score: " ..score, 93, spaceship_starting_y+8, 7)
 end
 
@@ -101,6 +100,15 @@ end
 function draw_game_over()
     centered_print("game over :(", 64, 70, 7)
     centered_print("press \x97 to try again", 64, 110, 7)
+end
+
+function life_icons()
+    local icons=""
+    local i
+    for i = 1,lives_remaining do
+        icons=icons.."\x92"
+    end
+    return icons
 end
 
 function draw_sky()
