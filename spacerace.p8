@@ -69,7 +69,7 @@ function _draw()
         draw_game()
     elseif game_state == "victorious" then
         draw_win_screen()
-    elseif gamestate == "menu" then
+    elseif game_state == "menu" then
         draw_menu()
     end
 end
