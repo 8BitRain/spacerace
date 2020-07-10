@@ -4,10 +4,11 @@ __lua__
 
 local score
 local spaceship_starting_y
-local game_state -- "menu", "playing", or "victorious"
+local game_state -- "menu", "playing", "over", or "victorious"
 local level_transition
 local level_transition_time
 local game_objects
+local lives_remaining
 
 function _init() 
     -- constants
@@ -17,6 +18,7 @@ function _init()
     game_state="menu"
     level_transition=false
     level_transition_time=0
+    lives_remaining=3
 
     -- game objects
     game_objects={}
@@ -75,6 +77,8 @@ function _draw()
         draw_win_screen()
     elseif game_state == "menu" then
         draw_menu()
+    elseif game_state == "over" then
+        draw_game_over()
     end
 end
 
@@ -83,15 +87,21 @@ function draw_game()
     for obj in all(game_objects) do
         obj:draw()
     end
+
+    print("lives: ".. lives_remaining, 4, spaceship_starting_y+8, 7)
 end
 
 function draw_menu()
     centered_print("space race", 64, 70, 7)
-    centered_print("press \x97 to play",64,96,7)
+    centered_print("press \x97 to play", 64, 96, 7)
 end
 
 function draw_win_screen()
-    centered_print("you win!!!!",64, 70, 7)
+    centered_print("you win!!!!", 64, 70, 7)
+end
+
+function draw_game_over()
+    centered_print("game over :(", 64, 70, 7)
 end
 
 function draw_sky()
@@ -147,7 +157,7 @@ function make_spaceship()
     make_game_object("spaceship", 64, spaceship_starting_y, {
         velocity=0,
         speed=1.7, 
-        score=0,
+        score=0, -- todo score shouldn't live on spaceship
         width=8,
         radius=4,
         update=function(self)
@@ -202,6 +212,10 @@ function make_spaceship()
         check_for_collision=function(self,asteroid)
             if circles_overlapping(self.x,self.y,self.radius,asteroid.x,asteroid.y,asteroid.radius) then 
                 self.y=spaceship_starting_y
+                lives_remaining-=1
+                if lives_remaining < 0 then
+                    game_state= "over"
+                end
                 sfx(0)
             end
         end,
