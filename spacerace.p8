@@ -4,7 +4,7 @@ __lua__
 
 local score
 local spaceship_starting_y
-local game_state -- "menu", "playing", or "victorious!"
+local game_state -- "menu", "playing", or "victorious"
 local level_transition
 local level_transition_time
 local game_objects
@@ -36,13 +36,7 @@ function _update()
 end
 
 function update_game()
-    if level_transition then 
-        level_transition_time+=1
-        if level_transition_time > 17 then
-            level_transition=false
-            level_transition_time=0
-        end
-    end
+    deal_with_level_transition()
 
     local obj
     for obj in all(game_objects) do
@@ -54,6 +48,16 @@ function update_game()
             del(game_objects, particle)
         end
     end)
+end
+
+function deal_with_level_transition()
+    if level_transition then 
+        level_transition_time+=1
+        if level_transition_time > 17 then
+            level_transition=false
+            level_transition_time=0
+        end
+    end
 end
 
 function update_menu()
