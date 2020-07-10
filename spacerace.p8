@@ -96,7 +96,7 @@ end
 
 function draw_menu()
     centered_print("space race", 64, 70, 7)
-    centered_print("press \x97 to play", 64, 96, 7)
+    centered_print("press \x97 to play", 64, 110, 7)
 end
 
 function draw_win_screen()
