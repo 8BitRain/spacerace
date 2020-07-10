@@ -1,6 +1,6 @@
 # Space Race 
 
-_[Play it here](https://www.lexaloffle.com/bbs/?tid=38734)_
+*[Play it here](https://www.lexaloffle.com/bbs/?tid=38734)*
 
 _Note: this is still a work in progress._
 
