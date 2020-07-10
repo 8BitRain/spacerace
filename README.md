@@ -4,13 +4,16 @@
 
 **[Play it here](https://www.lexaloffle.com/bbs/?tid=38734)**
 
-_Note: this is still a work in progress._
+Your private space company SpicoX must successfully deliver 10 rockets to orbit
+to win a government contract. Along the way, each rocket will have to dodge its
+way through an ever-growing field of [space
+debris.](https://en.wikipedia.org/wiki/Space_debris)
 
-A modern remake of the [classic 1973 arcade game](https://en.wikipedia.org/wiki/Space_Race_(video_game)), except single-player and with updated graphics.
+As a private space startup, money is tight. Your company only has enough
+funding to lose 3 rockets. Any more and you will run out of money and be forced
+out of business.
 
-Deliver 10 rockets to orbit to win!
+## Controls 
 
-You start out with 3 spare ships. If you lose them all, your private space company will go bankrupt and it's game over.
-
-## Controls
 Up and down arrow keys - control your spaceship.
+
