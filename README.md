@@ -1,3 +1,5 @@
+![game cartridge](/spacerace.p8.png)
+
 # Space Race 
 
 **[Play it here](https://www.lexaloffle.com/bbs/?tid=38734)**
