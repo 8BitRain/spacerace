@@ -3,7 +3,7 @@ version 27
 __lua__
 
 local score
-local spaceship_starting_y
+local spaceship_starting_y=110
 local game_state -- "menu", "playing", "over", or "victorious"
 local level_transition
 local level_transition_time
@@ -11,11 +11,9 @@ local game_objects
 local lives_remaining
 local score
 
+
+-- initialization functions
 function _init() 
-    -- constants
-    spaceship_starting_y=110
-    
-    -- game state
     game_state="menu"
 end
 
@@ -25,7 +23,6 @@ function start_new_game()
     lives_remaining=3
     score=0
 
-    -- game objects
     game_objects={}
     for i=1,24 do
         local direction = i % 2 == 0 and 1 or -1
@@ -34,6 +31,7 @@ function start_new_game()
     make_spaceship()
 end
 
+-- update functions
 function _update()
     if game_state == "playing" then
         update_game()
@@ -57,16 +55,6 @@ function update_game()
     end)
 end
 
-function deal_with_level_transition()
-    if level_transition then 
-        level_transition_time+=1
-        if level_transition_time > 17 then
-            level_transition=false
-            level_transition_time=0
-        end
-    end
-end
-
 function update_menu()
     if btn(4) or btn(5) then
         game_state = "playing"
@@ -74,6 +62,7 @@ function update_menu()
     end
 end
 
+-- draw functions
 function _draw() 
     cls()
     draw_sky()
@@ -112,7 +101,6 @@ end
 function draw_game_over()
     centered_print("game over :(", 64, 70, 7)
     centered_print("press \x97 to try again", 64, 110, 7)
-
 end
 
 function draw_sky()
@@ -131,6 +119,7 @@ function draw_sky()
     fillp()
 end
 
+-- game object definitions
 function make_particle(x,y,_direction)
     make_game_object("particle", x,y, {
         c=y,
@@ -310,6 +299,18 @@ function outlined_print(text,x,y,col,outline_col)
 
     print(text,x,y,col)
 end
+
+-- assorted helpers
+function deal_with_level_transition()
+    if level_transition then 
+        level_transition_time+=1
+        if level_transition_time > 17 then
+            level_transition=false
+            level_transition_time=0
+        end
+    end
+end
+
 
 
 __gfx__
