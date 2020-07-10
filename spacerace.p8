@@ -4,7 +4,7 @@ __lua__
 
 local score
 local spaceship_starting_y
-local game_state -- 0: menu, 1: playing game, 2:you win!
+local game_state -- "menu", "playing", or "victorious!"
 local level_transition
 local level_transition_time
 local game_objects
@@ -14,7 +14,7 @@ function _init()
     spaceship_starting_y=110
     
     -- game state
-    game_state=0
+    game_state="menu"
     level_transition=false
     level_transition_time=0
 
@@ -28,9 +28,9 @@ function _init()
 end
 
 function _update()
-    if game_state == 1 then
+    if game_state == "playing" then
         update_game()
-    elseif game_state == 0 then
+    elseif game_state == "menu" then
         update_menu()
     end
 end
@@ -58,18 +58,18 @@ end
 
 function update_menu()
     if btn(4) or btn(5) then
-        game_state = 1
+        game_state = "playing"
     end
 end
 
 function _draw() 
     cls()
     draw_sky()
-    if game_state == 1 then
+    if game_state == "playing" then
         draw_game()
-    elseif game_state == 2 then
+    elseif game_state == "victorious" then
         draw_win_screen()
-    else
+    elseif gamestate == "menu" then
         draw_menu()
     end
 end
@@ -183,7 +183,7 @@ function make_spaceship()
             self.y=spaceship_starting_y
             self.velocity=0
             if self.score >= 10 then
-                game_state=2
+                game_state= "victorious"
                 sfx(3)
             else
                 sfx(2)
