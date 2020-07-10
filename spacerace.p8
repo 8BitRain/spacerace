@@ -23,12 +23,16 @@ function start_new_game()
     score=0
 
     game_objects={}
-    for i=1,24 do
+    generate_asteroids(24)
+    make_spaceship()
+end
+
+function generate_asteroids(n)
+    for i=1,n do
         local direction = i % 2 == 0 and 1 or -1
         make_asteroid(rnd(120),rnd(90),direction)
     end
-    make_spaceship()
-end
+end 
 
 -- update functions
 function _update()
