@@ -1,3 +1,6 @@
+-- space race
+-- by andrew edstrom
+
 pico-8 cartridge // http://www.pico-8.com
 version 27
 __lua__
