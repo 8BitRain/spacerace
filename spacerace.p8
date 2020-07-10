@@ -9,6 +9,7 @@ local level_transition
 local level_transition_time
 local game_objects
 local lives_remaining
+local score
 
 function _init() 
     -- constants
@@ -19,6 +20,7 @@ function _init()
     level_transition=false
     level_transition_time=0
     lives_remaining=3
+    score=0
 
     -- game objects
     game_objects={}
@@ -88,7 +90,8 @@ function draw_game()
         obj:draw()
     end
 
-    print("lives: ".. lives_remaining, 4, spaceship_starting_y+8, 7)
+    print("lives: "..lives_remaining, 4, spaceship_starting_y+8, 7)
+    print("score: " ..score, 93, spaceship_starting_y+8, 7)
 end
 
 function draw_menu()
@@ -156,8 +159,7 @@ end
 function make_spaceship()
     make_game_object("spaceship", 64, spaceship_starting_y, {
         velocity=0,
-        speed=1.7, 
-        score=0, -- todo score shouldn't live on spaceship
+        speed=1.7,
         width=8,
         radius=4,
         update=function(self)
@@ -192,11 +194,11 @@ function make_spaceship()
             end)
         end,
         score_point=function(self)
-            self.score+=1
+            score+=1
             level_transition=true
             self.y=spaceship_starting_y
             self.velocity=0
-            if self.score >= 10 then
+            if score >= 10 then
                 game_state= "victorious"
                 sfx(3)
             else
@@ -207,7 +209,6 @@ function make_spaceship()
             if not level_transition then
                 spr(1,self.x-3,self.y-4)
             end
-            print(self.score, self.x-2*self.width,spaceship_starting_y,7)
         end,
         check_for_collision=function(self,asteroid)
             if circles_overlapping(self.x,self.y,self.radius,asteroid.x,asteroid.y,asteroid.radius) then 
