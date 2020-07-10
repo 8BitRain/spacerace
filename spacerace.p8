@@ -17,6 +17,9 @@ function _init()
     
     -- game state
     game_state="menu"
+end
+
+function start_new_game()
     level_transition=false
     level_transition_time=0
     lives_remaining=3
@@ -34,7 +37,7 @@ end
 function _update()
     if game_state == "playing" then
         update_game()
-    elseif game_state == "menu" then
+    else
         update_menu()
     end
 end
@@ -67,6 +70,7 @@ end
 function update_menu()
     if btn(4) or btn(5) then
         game_state = "playing"
+        start_new_game()
     end
 end
 
@@ -101,10 +105,14 @@ end
 
 function draw_win_screen()
     centered_print("you win!!!!", 64, 70, 7)
+    centered_print("press \x97 to play again", 64, 110, 7)
+
 end
 
 function draw_game_over()
     centered_print("game over :(", 64, 70, 7)
+    centered_print("press \x97 to try again", 64, 110, 7)
+
 end
 
 function draw_sky()
