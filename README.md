@@ -4,12 +4,11 @@
 
 _Note: this is still a work in progress._
 
-A clone of the 1973 arcade game [Space Race](https://en.wikipedia.org/wiki/Space_Race_(video_game)), except single-player and with some updated graphics.
+A modern remake of the [classic 1973 arcade game](https://en.wikipedia.org/wiki/Space_Race_(video_game)), except single-player and with updated graphics.
 
-Reach the top of the screen 10 times to win!
+Deliver 10 rockets to orbit to win!
+
+You start out with 3 spare ships. If you lose them all, your private space company will go bankrupt and it's game over.
 
 ## Controls
 Up and down arrow keys - control your spaceship.
-
-## Known Issues
-The asteroids are generated randomly when the cart starts up, which sometimes makes it very hard to reach the top of the screen. If you are finding it particularly difficult/impossible to make it past a cluster of asteroids, try resetting the cart to get a new random set of asteroids.
