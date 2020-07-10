@@ -82,7 +82,7 @@ function draw_game()
         obj:draw()
     end
 
-    print("spare ships: "..life_icons(), 4, spaceship_starting_y+8, 7)
+    print(life_icons(), 4, spaceship_starting_y+8, 7)
     print("score: " ..score, 93, spaceship_starting_y+8, 7)
 end
 
