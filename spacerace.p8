@@ -19,6 +19,7 @@ function _init()
 end
 
 function start_new_game()
+    srand(32)
     level_transition=false
     level_transition_time=0
     lives_remaining=3
