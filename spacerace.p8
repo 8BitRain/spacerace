@@ -3,7 +3,7 @@ version 27
 __lua__
 
 local score
-local shake
+local screen_shake
 local spaceship_starting_y
 local game_state -- 0: menu, 1: playing game, 2:you win!
 local level_transition
@@ -19,8 +19,8 @@ function _init()
     level_transition=false
     level_transition_time=0
 
-    -- juiceness
-    shake=0
+    -- game feel thiccness(juiceness)
+    screen_shake=0
 
     -- game objects
     game_objects={}
@@ -203,7 +203,7 @@ function make_spaceship()
         check_for_collision=function(self,asteroid)
             if circles_overlapping(self.x,self.y,self.radius,asteroid.x,asteroid.y,asteroid.radius) then 
                 self.y=spaceship_starting_y
-                shake+=.5
+                screen_shake+=.5
                 sfx(0)
             end
         end,
@@ -276,20 +276,20 @@ function foreach_game_object_of_kind(kind, callback)
     end
 end
 
--- juiceness (shake)
+-- juiceness (screen_shake)
 function doshake()
     local shakex=16-rnd(32)
     local shakey=16-rnd(32)
 
-    shakex=shakex*shake
-    shakey=shakey*shake
+    shakex=shakex*screen_shake
+    shakey=shakey*screen_shake
 
     camera(shakex,shakey)
 
     -- (concept) could replace .95 with a different animation function
-    shake=shake*.95
-    if shake<0.05 then
-        shake = 0
+    screen_shake=screen_shake*.95
+    if screen_shake<0.05 then
+        screen_shake = 0
     end
 end
 
