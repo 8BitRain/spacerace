@@ -4,6 +4,9 @@ __lua__
 
 local score
 local screen_shake
+local freeze_cor
+local resume_time
+local global_time
 local spaceship_starting_y
 local game_state -- 0: menu, 1: playing game, 2:you win!
 local level_transition
@@ -29,13 +32,29 @@ function _init()
         make_asteroid(rnd(120),rnd(90),direction)
     end
     make_spaceship()
+
+    --global time
+    global_time = 0
+
+    --freeze
+    freeze_cor = nil
+    resume_time = 0
 end
 
 function _update()
-    if game_state == 1 then
-        update_game()
-    elseif game_state == 0 then
-        update_menu()
+    --global_time++
+    if freeze_cor and costatus(freeze_cor) != 'dead' then
+        coresume(freeze_cor)
+    else
+        freeze_cor = nil
+    end
+    if time() < resume_time then
+        if game_state == 1 then
+            update_game()
+        elseif game_state == 0 then
+            update_menu()
+        end
+        resume_time = 0
     end
 end
 
@@ -202,8 +221,9 @@ function make_spaceship()
         end,
         check_for_collision=function(self,asteroid)
             if circles_overlapping(self.x,self.y,self.radius,asteroid.x,asteroid.y,asteroid.radius) then 
-                self.y=spaceship_starting_y
+                freeze_cor = cocreate(freeze)
                 screen_shake+=.5
+                self.y=spaceship_starting_y
                 sfx(0)
             end
         end,
@@ -290,7 +310,15 @@ function doshake()
     screen_shake=screen_shake*.95
     if screen_shake<0.05 then
         screen_shake = 0
+        resume_time = time() + 1
     end
+end
+
+--juiceness (freeze)
+function freeze()
+    for i = 1,122 do 
+        yield()
+    end 
 end
 
 -- fancy printing
